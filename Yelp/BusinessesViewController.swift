@@ -29,16 +29,13 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 120
         
-//        Business.searchWithTerm("", sort: .Distance, categories: [], deals: nil) { (businesses: [Business]!, error: NSError!) -> Void in
-//            
-//            self.businesses = businesses
-//            self.tableView.reloadData()
-//            
-//            for business in businesses {
-//                println(business.name!)
-//                println(business.address!)
-//            }
-//        }
+        Business.searchWithTerm("Restaurants", sort: .Distance, categories: [], deals: nil, distance: nil) { (businesses: [Business]!, error: NSError!) -> Void in
+            
+            self.businesses = businesses
+            self.tableView.reloadData()
+            
+            
+        }
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -75,11 +72,16 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     func filtersViewController(filltersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
         //Deals
         var deals = filters["deals"] as? Bool
+        
+        //Distance
+        var distance = filters["distance"] as? Double
 
         //Categories
         var categories = filters["categories"] as? [String]
         
-        Business.searchWithTerm("Restaurants", sort: nil, categories: categories, deals: deals) { (businesses: [Business]!, error: NSError!) -> Void in
+        var sortBy = filters["sortBy"] as? Int
+        
+        Business.searchWithTerm("Restaurants", sort: nil, categories: categories, deals: deals, distance: distance) { (businesses: [Business]!, error: NSError!) -> Void in
             self.businesses = businesses
             self.tableView.reloadData()
         }

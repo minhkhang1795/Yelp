@@ -19,12 +19,22 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
     weak var delegate: FiltersViewControllerDelegate?
     
     var categories: [[String:String]]!
-    var deals: Bool = false
+    var deals: Bool!
+    var distance = [Double]()
+    var distanceStates = [Bool]()
+    var sortBy = [String]()
+    var sortByStates = [Bool]()
     var switchStates = [Int:Bool]()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        deals = false
+        distance = [0.3, 1, 5, 10]
+        distanceStates = [false, false, false, false]
+        sortBy = ["BestMatched", "Distance", "HighestRated"]
+        sortByStates = [false, false, false]
         categories = yelpCategories()
 
         tableView.delegate = self
@@ -46,10 +56,24 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
         dismissViewControllerAnimated(true, completion: nil)
         var filters = [String:AnyObject]()
         
-        // Sort by Deals (on/off)
+        //Deals
         filters["deals"] = deals
         
-        // Sort by Categories
+        //Distance
+        for var index = 0; index < distance.count; index++ {
+            if distanceStates[index] == true {
+                filters["distance"] = distance[index]
+            }
+        }
+        
+        //Sort by
+        for var index = 0; index < sortBy.count; index++ {
+            if sortByStates[index] == true {
+                filters["sortBy"] = index
+            }
+        }
+        
+        //Categories
         var selectedCategories = [String]()
         for (row, isSelected) in switchStates {
             if isSelected {
@@ -67,12 +91,16 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
     // MARK: Table View Control
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 2
+        return 4
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
         if section == 0 {
-            return 1
+            return 1 //deal
+        } else  if section == 1 {
+            return distance.count
+        } else if section == 2 {
+            return sortBy.count
         } else {
             return categories.count
         }
@@ -86,26 +114,65 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
             //let cell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchCell
             cell.switchLabel.text = "Offering a Deal"
             cell.delegate = self
-            cell.onSwitch.on = switchStates[indexPath.row] ?? false
+            cell.onSwitch.on = deals ?? false
+        }
             
+        //Distance
+        else if indexPath.section == 1 {
+            cell.switchLabel.text = String(format: "%.1f mi", distance[indexPath.row])
+            cell.delegate = self
+            cell.onSwitch.on = distanceStates[indexPath.row] ?? false
+        }
+            
+        //Sort by
+        else if indexPath.section == 2 {
+            cell.switchLabel.text = sortBy[indexPath.row]
+            cell.delegate = self
+            cell.onSwitch.on = sortByStates[indexPath.row] ?? false
         }
          
         //Categories
-        else if indexPath.section >= 1 {
+        else if indexPath.section == 3 {
             //let cell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchCell
             cell.switchLabel.text = categories[indexPath.row]["name"]
             cell.delegate = self
             cell.onSwitch.on = switchStates[indexPath.row] ?? false
-            
         }
         return cell
     }
     
     func switchCell(switchCell: SwitchCell, didChangeValue value: Bool) {
         let indexPath = tableView.indexPathForCell(switchCell)!
+        
         if indexPath.section == 0 {
             deals = value
-        } else {
+        }
+        
+        else if indexPath.section == 1 {
+            for var i = 0; i < distance.count; i++ {
+                if i == indexPath.row {
+                    distanceStates[i] = distanceStates[i] ? false : true
+                } else {
+                    distanceStates[i] = false
+                }
+                var indexPathTemp = NSIndexPath(forRow: i, inSection: 1)
+                self.tableView.reloadRowsAtIndexPaths([indexPathTemp], withRowAnimation: UITableViewRowAnimation.Fade)
+            }
+        }
+        
+        else if indexPath.section == 2 {
+            for var i = 0; i < sortBy.count; i++ {
+                if i == indexPath.row {
+                    sortByStates[i] = sortByStates[i] ? false : true
+                } else {
+                    sortByStates[i] = false
+                }
+                var indexPathTemp = NSIndexPath(forRow: i, inSection: 2)
+                self.tableView.reloadRowsAtIndexPaths([indexPathTemp], withRowAnimation: UITableViewRowAnimation.Fade)
+            }
+        }
+        
+        else {
             switchStates[indexPath.row] = value
         }
     }
