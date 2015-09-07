@@ -9,7 +9,8 @@
 import UIKit
 
 @objc protocol FiltersViewControllerDelegate {
-    optional func filtersViewController(filltersViewController: FiltersViewController, didUpdateFilters filters: [String:AnyObject])
+    optional func filtersViewController(filltersViewController: FiltersViewController, didUpdateFilters
+        filters: [String:AnyObject])
 }
 
 class FiltersViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SwitchCellDelegate {
@@ -20,8 +21,8 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var categories: [[String:String]] = []
     var deals: Bool!
-    let distance: [Double] = [0.3, 0.8, 2, 3, 5, 10]
-    var distanceStates: [Bool] = [false, false, false, false, false, false]
+    let distance: [Double] = [0.3, 0.8, 2, 3, 5]
+    var distanceStates: [Bool] = [false, false, false, false, false]
     let sortBy: [String] = ["BestMatched", "Distance", "HighestRated"]
     var sortByStates: [Bool] = [false, false, false]
     var switchStates = [Int:Bool]()
@@ -41,8 +42,6 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
         
         tableView.delegate = self
         tableView.dataSource = self
-        
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -141,25 +140,44 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
             
         // Distance
         else if indexPath.section == 1 {
-            if sortBySeeAll == false && indexPath.row == 3 {
-                cell.switchLabel.text = String(format: "%.1f mi", distance[indexPath.row])
-                cell.delegate = self
-                cell.onSwitch.on = distanceStates[indexPath.row] ?? false
-                // Do something else...
+            if distanceSeeAll == false && indexPath.row == 0 {
+                var choiceCell = tableView.dequeueReusableCellWithIdentifier("ChoiceCell") as! SwitchCell
+                choiceCell.choiceLabel.text = "None"
+                for var i = 0; i < distance.count; i++ {
+                    if distanceStates[i] == true {
+                        choiceCell.choiceLabel.text = String(format: "%.1f mi", distance[i])
+                    }
+                }
+                choiceCell.choiceImageView.image = UIImage(named: "dropdown")
+                return choiceCell
             }
             else {
-                cell.switchLabel.text = String(format: "%.1f mi", distance[indexPath.row])
-                cell.delegate = self
-                cell.onSwitch.on = distanceStates[indexPath.row] ?? false
-                // Do something else...
+                var choiceCell = tableView.dequeueReusableCellWithIdentifier("ChoiceCell") as! SwitchCell
+                choiceCell.choiceLabel.text = String(format: "%.1f mi", distance[indexPath.row])
+                choiceCell.choiceImageView.image = distanceStates[indexPath.row] ? UIImage(named: "checked") : UIImage(named: "unchecked")
+                return choiceCell
             }
         }
             
         // Sort by
         else if indexPath.section == 2 {
-            cell.switchLabel.text = sortBy[indexPath.row]
-            cell.delegate = self
-            cell.onSwitch.on = sortByStates[indexPath.row] ?? false
+            if sortBySeeAll == false && indexPath.row == 0 {
+                var choiceCell = tableView.dequeueReusableCellWithIdentifier("ChoiceCell") as! SwitchCell
+                choiceCell.choiceLabel.text = "None"
+                for var i = 0; i < sortBy.count; i++ {
+                    if sortByStates[i] == true {
+                        choiceCell.choiceLabel.text = sortBy[i]
+                    }
+                }
+                choiceCell.choiceImageView.image = UIImage(named: "dropdown")
+                return choiceCell
+            }
+            else {
+                var choiceCell = tableView.dequeueReusableCellWithIdentifier("ChoiceCell") as! SwitchCell
+                choiceCell.choiceLabel.text = sortBy[indexPath.row]
+                choiceCell.choiceImageView.image = sortByStates[indexPath.row] ? UIImage(named: "checked") : UIImage(named: "unchecked")
+                return choiceCell
+            }
         }
          
         // Categories
@@ -181,53 +199,77 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        if indexPath.section == 1 && indexPath.row == 0 && distanceSeeAll == false {
+        
+        switch(indexPath.section) {
+        
+        case 1:
+        // Distance Cells Clicked
+        if distanceSeeAll == false {
             distanceSeeAll = true
-            self.tableView.reloadData()
-            //self.tableView.reloadSections(, withRowAnimation: UITableViewRowAnimation.Automatic)
-        }
-        if indexPath.section == 2 && indexPath.row == 0 && sortBySeeAll == false {
-            sortBySeeAll = true
-            self.tableView.reloadData()
-            //self.tableView.reloadSections(, withRowAnimation: UITableViewRowAnimation.Automatic)
-        }
-        if indexPath.section == 3 && indexPath.row == 3 && categoriesSeeAll == false {
-            categoriesSeeAll = true
-            self.tableView.reloadData()
-            //self.tableView.reloadSections(, withRowAnimation: UITableViewRowAnimation.Automatic)
-        }
-    }
-    
-    func switchCell(switchCell: SwitchCell, didChangeValue value: Bool) {
-        let indexPath = tableView.indexPathForCell(switchCell)!
-        //Deals
-        if indexPath.section == 0 {
-            deals = value
-        }
-        //Distance
-        else if indexPath.section == 1 {
+            self.tableView.reloadSections(NSIndexSet(index: 1), withRowAnimation: UITableViewRowAnimation.Fade)
+        } else {
             for var i = 0; i < distance.count; i++ {
                 if i == indexPath.row {
                     distanceStates[i] = distanceStates[i] ? false : true
                 } else {
                     distanceStates[i] = false
                 }
-                var indexPathTemp = NSIndexPath(forRow: i, inSection: 1)
-                self.tableView.reloadRowsAtIndexPaths([indexPathTemp], withRowAnimation: UITableViewRowAnimation.Fade)
+                
             }
+            distanceSeeAll = false
+            self.tableView.reloadSections(NSIndexSet(index: 1), withRowAnimation: UITableViewRowAnimation.Fade)
+            }
+        
+        case 2:
+        // Sort By Cells Clicked
+            if sortBySeeAll == false {
+                sortBySeeAll = true
+                self.tableView.reloadSections(NSIndexSet(index: 2), withRowAnimation: UITableViewRowAnimation.Fade)
+            } else {
+                for var i = 0; i < sortBy.count; i++ {
+                    if i == indexPath.row {
+                        sortByStates[i] = sortByStates[i] ? false : true
+                    } else {
+                        sortByStates[i] = false
+                    }
+                    
+                }
+                sortBySeeAll = false
+                self.tableView.reloadSections(NSIndexSet(index: 2), withRowAnimation: UITableViewRowAnimation.Fade)
+            }
+            
+        case 3:
+        // Categories Cells Clicked
+        if indexPath.row == 3 && categoriesSeeAll == false {
+            categoriesSeeAll = true
+            self.tableView.reloadSections(NSIndexSet(index: 3), withRowAnimation: UITableViewRowAnimation.Fade)
+            }
+        
+        default:
+            println("asd")
         }
+        
+        
+    }
+    
+    func switchCell(switchCell: SwitchCell, didChangeValue value: Bool) {
+        let indexPath = tableView.indexPathForCell(switchCell)!
+        
+        //Deals
+        if indexPath.section == 0 {
+            deals = value
+        }
+        
+        //Distance
+        else if indexPath.section == 1 {
+            // I use image instead of switch
+        }
+        
         //Sort
         else if indexPath.section == 2 {
-            for var i = 0; i < sortBy.count; i++ {
-                if i == indexPath.row {
-                    sortByStates[i] = sortByStates[i] ? false : true
-                } else {
-                    sortByStates[i] = false
-                }
-                var indexPathTemp = NSIndexPath(forRow: i, inSection: 2)
-                self.tableView.reloadRowsAtIndexPaths([indexPathTemp], withRowAnimation: UITableViewRowAnimation.Fade)
-            }
+            // I use image instead of switch
         }
+            
         //Categories
         else {
             switchStates[indexPath.row] = value

@@ -1,38 +1,41 @@
 PODS:
-  - AFNetworking (2.5.3):
-    - AFNetworking/NSURLConnection (= 2.5.3)
-    - AFNetworking/NSURLSession (= 2.5.3)
-    - AFNetworking/Reachability (= 2.5.3)
-    - AFNetworking/Security (= 2.5.3)
-    - AFNetworking/Serialization (= 2.5.3)
-    - AFNetworking/UIKit (= 2.5.3)
-  - AFNetworking/NSURLConnection (2.5.3):
+  - AFNetworking (2.5.4):
+    - AFNetworking/NSURLConnection (= 2.5.4)
+    - AFNetworking/NSURLSession (= 2.5.4)
+    - AFNetworking/Reachability (= 2.5.4)
+    - AFNetworking/Security (= 2.5.4)
+    - AFNetworking/Serialization (= 2.5.4)
+    - AFNetworking/UIKit (= 2.5.4)
+  - AFNetworking/NSURLConnection (2.5.4):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/NSURLSession (2.5.3):
+  - AFNetworking/NSURLSession (2.5.4):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/Reachability (2.5.3)
-  - AFNetworking/Security (2.5.3)
-  - AFNetworking/Serialization (2.5.3)
-  - AFNetworking/UIKit (2.5.3):
+  - AFNetworking/Reachability (2.5.4)
+  - AFNetworking/Security (2.5.4)
+  - AFNetworking/Serialization (2.5.4)
+  - AFNetworking/UIKit (2.5.4):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
   - BDBOAuth1Manager (1.5.0):
     - AFNetworking/NSURLConnection (~> 2.5.0)
     - AFNetworking/NSURLSession (~> 2.5.0)
   - Switch (1.0.1)
+  - ToggleView (0.0.1)
 
 DEPENDENCIES:
   - AFNetworking
   - BDBOAuth1Manager
   - Switch
+  - ToggleView
 
 SPEC CHECKSUMS:
-  AFNetworking: e1d86c2a96bb5d2e7408da36149806706ee122fe
+  AFNetworking: 05edc0ac4c4c8cf57bcf4b84be5b0744b6d8e71e
   BDBOAuth1Manager: 2e28773b58f880fb36b5cd3efcf0b1fefbc78a99
   Switch: d680de3007d13c42e65d072944f4499884b2c538
+  ToggleView: c19e75ab7c78d548f9eca8e3c438271cce6c9e2d
 
 COCOAPODS: 0.38.2

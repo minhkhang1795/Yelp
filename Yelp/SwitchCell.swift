@@ -17,10 +17,15 @@ class SwitchCell: UITableViewCell {
     @IBOutlet weak var switchLabel: UILabel!
     @IBOutlet weak var onSwitch: UISwitch!
     
+    @IBOutlet weak var choiceLabel: UILabel!
+    @IBOutlet weak var choiceImageView: UIImageView!
+    var onChecked = false
+    
     weak var delegate: SwitchCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
+    
         // Initialization code
     }
 
