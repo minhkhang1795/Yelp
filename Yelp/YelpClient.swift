@@ -71,7 +71,8 @@ class YelpClient: BDBOAuth1RequestOperationManager {
         }
         
         if distance != nil {
-            parameters["radius_filter"] = distance
+            let milesPerMeter = 0.000621371
+            parameters["radius_filter"] = distance!/milesPerMeter
         }
         
         

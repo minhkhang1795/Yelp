@@ -23,13 +23,16 @@ PODS:
   - BDBOAuth1Manager (1.5.0):
     - AFNetworking/NSURLConnection (~> 2.5.0)
     - AFNetworking/NSURLSession (~> 2.5.0)
+  - Switch (1.0.1)
 
 DEPENDENCIES:
   - AFNetworking
   - BDBOAuth1Manager
+  - Switch
 
 SPEC CHECKSUMS:
   AFNetworking: e1d86c2a96bb5d2e7408da36149806706ee122fe
   BDBOAuth1Manager: 2e28773b58f880fb36b5cd3efcf0b1fefbc78a99
+  Switch: d680de3007d13c42e65d072944f4499884b2c538
 
 COCOAPODS: 0.38.2

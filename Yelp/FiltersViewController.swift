@@ -18,25 +18,20 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
 
     weak var delegate: FiltersViewControllerDelegate?
     
-    var categories: [[String:String]]!
+    var categories: [[String:String]] = []
     var deals: Bool!
-    var distance = [Double]()
-    var distanceStates = [Bool]()
-    var sortBy = [String]()
-    var sortByStates = [Bool]()
+    let distance: [Double] = [0.3, 0.8, 2, 3, 5, 10]
+    var distanceStates: [Bool] = [false, false, false, false, false, false]
+    let sortBy: [String] = ["BestMatched", "Distance", "HighestRated"]
+    var sortByStates: [Bool] = [false, false, false]
     var switchStates = [Int:Bool]()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        deals = false
-        distance = [0.3, 1, 5, 10]
-        distanceStates = [false, false, false, false]
-        sortBy = ["BestMatched", "Distance", "HighestRated"]
-        sortByStates = [false, false, false]
         categories = yelpCategories()
-
+        deals = false
         tableView.delegate = self
         tableView.dataSource = self
     }
@@ -69,7 +64,7 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
         //Sort by
         for var index = 0; index < sortBy.count; index++ {
             if sortByStates[index] == true {
-                filters["sortBy"] = index
+                filters["sortRawValue"] = index
             }
         }
         

@@ -113,6 +113,10 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yG7-nV-lhc" userLabel="FadedView">
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -120,6 +124,10 @@
                             <constraint firstAttribute="trailing" secondItem="PP0-Qy-nTm" secondAttribute="trailing" id="It6-J8-Iit"/>
                             <constraint firstItem="VBY-gq-v8E" firstAttribute="top" secondItem="PP0-Qy-nTm" secondAttribute="bottom" id="Pzj-uV-Ksv"/>
                             <constraint firstItem="PP0-Qy-nTm" firstAttribute="top" secondItem="XhR-oz-92f" secondAttribute="top" id="VG5-QP-olC"/>
+                            <constraint firstItem="yG7-nV-lhc" firstAttribute="top" secondItem="hR0-74-jRp" secondAttribute="bottom" id="gMM-Nj-BUE"/>
+                            <constraint firstItem="yG7-nV-lhc" firstAttribute="leading" secondItem="XhR-oz-92f" secondAttribute="leading" id="hDM-zU-QF7"/>
+                            <constraint firstAttribute="trailing" secondItem="yG7-nV-lhc" secondAttribute="trailing" id="jxs-j2-TqA"/>
+                            <constraint firstItem="VBY-gq-v8E" firstAttribute="top" secondItem="yG7-nV-lhc" secondAttribute="bottom" id="xjU-Dh-bjn"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Yelp" id="WZI-Mr-A9Y">
@@ -130,6 +138,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="fadedView" destination="yG7-nV-lhc" id="QFt-en-wi7"/>
                         <outlet property="tableView" destination="PP0-Qy-nTm" id="sKv-ld-hPv"/>
                     </connections>
                 </viewController>
@@ -149,17 +158,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="mfE-hE-BuI">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="mfE-hE-BuI">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="choiceCell" rowHeight="70" id="UKG-d4-Xos">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UKG-d4-Xos" id="9CZ-ur-e7e">
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SwitchCell" rowHeight="70" id="5l6-mT-Vc7" customClass="SwitchCell" customModule="Yelp" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
@@ -174,6 +176,8 @@
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jAn-bi-2Jy">
                                                     <rect key="frame" x="263" y="19" width="51" height="31"/>
+                                                    <color key="onTintColor" red="0.89411764709999997" green="0.89411764709999997" blue="0.89411764709999997" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="thumbTintColor" red="0.66952730429999996" green="0.1156299553" blue="0.1529045755" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
                                                         <action selector="switchValueChanged:" destination="5l6-mT-Vc7" eventType="valueChanged" id="j2S-2Q-xgM"/>
                                                     </connections>
@@ -195,6 +199,12 @@
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="mfE-hE-BuI" secondAttribute="trailing" id="0y9-y6-kgY"/>
+                            <constraint firstItem="mfE-hE-BuI" firstAttribute="leading" secondItem="AxD-JC-IAl" secondAttribute="leading" id="Paz-Oc-7N6"/>
+                            <constraint firstItem="mfE-hE-BuI" firstAttribute="top" secondItem="AxD-JC-IAl" secondAttribute="top" id="rBS-Ym-GWV"/>
+                            <constraint firstItem="PA3-A6-Be6" firstAttribute="top" secondItem="mfE-hE-BuI" secondAttribute="bottom" id="uMi-R6-xVJ"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Filters" id="uQB-Kk-2tD">
                         <barButtonItem key="leftBarButtonItem" title="Cancel" id="BA9-8X-Gvr">
@@ -224,6 +234,10 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="boB-fQ-90Y">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.64313725490196083" green="0.050980392156862744" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -242,6 +256,10 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="OfY-Jk-T0P">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.64313725489999995" green="0.050980392159999999" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -258,4 +276,5 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
+    <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

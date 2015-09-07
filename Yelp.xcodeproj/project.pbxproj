@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		03D1A025B413415787AD3DF3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C56EF0CE844A4EE5819C72AF /* libPods.a */; };
 		222D8A5B19CCF9F900D2DB53 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222D8A5A19CCF9F900D2DB53 /* AppDelegate.swift */; };
 		222D8A6019CCF9F900D2DB53 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 222D8A5E19CCF9F900D2DB53 /* Main.storyboard */; };
 		222D8A6219CCF9F900D2DB53 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 222D8A6119CCF9F900D2DB53 /* Images.xcassets */; };
@@ -19,6 +18,8 @@
 		2ADBB4FD1B98662800F8AC67 /* BusinessCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ADBB4FC1B98662800F8AC67 /* BusinessCell.swift */; };
 		2AEB028E1B99421600F02638 /* FiltersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEB028D1B99421600F02638 /* FiltersViewController.swift */; };
 		2AEB02901B99424C00F02638 /* SwitchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEB028F1B99424C00F02638 /* SwitchCell.swift */; };
+		7D772B95CDC5508170AA7D22 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C77F916C43CF84ED0626160E /* libPods.a */; };
+		EDD74043FFC494C9A8E33FAF /* Pods_Yelp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE4C73B2E40B97A25CB9F66B /* Pods_Yelp.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,7 +51,8 @@
 		2AEB028F1B99424C00F02638 /* SwitchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchCell.swift; sourceTree = "<group>"; };
 		97D8B2E3FFD1AF4F4A707E47 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		BBD540129B10DFE60E8C24E2 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		C56EF0CE844A4EE5819C72AF /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C77F916C43CF84ED0626160E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE4C73B2E40B97A25CB9F66B /* Pods_Yelp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Yelp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,7 +60,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				03D1A025B413415787AD3DF3 /* libPods.a in Frameworks */,
+				EDD74043FFC494C9A8E33FAF /* Pods_Yelp.framework in Frameworks */,
+				7D772B95CDC5508170AA7D22 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -171,7 +174,8 @@
 		4A7CA25ACD374CA0AC966A24 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				C56EF0CE844A4EE5819C72AF /* libPods.a */,
+				EE4C73B2E40B97A25CB9F66B /* Pods_Yelp.framework */,
+				C77F916C43CF84ED0626160E /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -388,6 +392,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -432,6 +437,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
