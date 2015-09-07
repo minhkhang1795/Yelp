@@ -21,7 +21,7 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var categories: [[String:String]] = []
     var deals: Bool!
-    let distance: [Double] = [0.3, 0.8, 2, 3, 5]
+    let distance: [Float] = [0.3, 0.8, 2, 3, 5]
     var distanceStates: [Bool] = [false, false, false, false, false]
     let sortBy: [String] = ["BestMatched", "Distance", "HighestRated"]
     var sortByStates: [Bool] = [false, false, false]
@@ -105,7 +105,7 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
         case 2:
             return sortBySeeAll == true ? sortBy.count : 1
         case 3:
-            return categoriesSeeAll == true ? categories.count : 4
+            return categoriesSeeAll == true ? categories.count + 1 : 4
         default:
             return 0
         }
@@ -186,9 +186,15 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
                 return seeAllCell
             }
             else {
-                cell.switchLabel.text = categories[indexPath.row]["name"]
-                cell.delegate = self
-                cell.onSwitch.on = switchStates[indexPath.row] ?? false
+                if indexPath.row == categories.count {
+                    var seeAllCell = tableView.dequeueReusableCellWithIdentifier("SeeAllCell") as! SwitchCell
+                    seeAllCell.seeAllLabel.text = "Collapse"
+                    return seeAllCell
+                } else {
+                    cell.switchLabel.text = categories[indexPath.row]["name"]
+                    cell.delegate = self
+                    cell.onSwitch.on = switchStates[indexPath.row] ?? false
+                }
             }
         }
         
@@ -241,11 +247,16 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
         // Categories Cells Clicked
         if indexPath.row == 3 && categoriesSeeAll == false {
             categoriesSeeAll = true
-            self.tableView.reloadSections(NSIndexSet(index: 3), withRowAnimation: UITableViewRowAnimation.Fade)
+            self.tableView.reloadSections(NSIndexSet(index: 3), withRowAnimation: UITableViewRowAnimation.Automatic)
+        } else {
+            if indexPath.row == categories.count {
+                categoriesSeeAll = false
+                self.tableView.reloadSections(NSIndexSet(index: 3), withRowAnimation: UITableViewRowAnimation.Automatic)
+            }
             }
         
         default:
-            println("asd")
+            println("Default.")
         }
         
         

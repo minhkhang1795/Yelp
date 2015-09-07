@@ -484,6 +484,9 @@
                                                 <constraint firstAttribute="centerY" secondItem="7E2-zm-hrb" secondAttribute="centerY" id="lNJ-7E-wkl"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="seeAllLabel" destination="7E2-zm-hrb" id="hBG-We-wtX"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>

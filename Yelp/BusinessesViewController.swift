@@ -56,10 +56,11 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     // - Table View
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if searchBarFilters != nil {
-            return searchBarFilters!.count
-        } else if businesses != nil {
-            return businesses!.count
+        if let businesses = businesses {
+            if searchActive {
+                return searchBarFilters!.count
+            }
+            return businesses.count
         } else {
             return 0
         }
@@ -130,16 +131,16 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "Filters" {
+            self.searchBar.text = ""
+            self.searchActive = false
             let navigationController = segue.destinationViewController as! UINavigationController
             let filtersViewController = navigationController.topViewController as! FiltersViewController
-            
             filtersViewController.delegate = self
         }
         
         else if segue.identifier == "BusinessDetails" {
             let cell = sender as! UITableViewCell
             let indexPath = tableView.indexPathForCell(cell)!
-            
             let business = searchActive ? searchBarFilters[indexPath.row] : businesses![indexPath.row]
             
             let businessDetailsViewController = segue.destinationViewController as! BusinessDetailsViewController
@@ -148,11 +149,12 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func filtersViewController(filltersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
+        
         //Deals
         var deals = filters["deals"] as? Bool
         
         //Distance
-        var distance = filters["distance"] as? Double
+        var distance = filters["distance"] as? Float
         
         //Sort
         var sortRawValue = filters["sortRawValue"] as? Int
@@ -161,7 +163,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         //Categories
         var categories = filters["categories"] as? [String]
         
-        Business.searchWithTerm("Restaurants", sort: sort, categories: categories, deals: deals, distance: distance, offset: 20) { (businesses: [Business]!, error: NSError!) -> Void in
+        Business.searchWithTerm("Restaurants", sort: sort, categories: categories, deals: deals, distance: distance, offset: nil) { (businesses: [Business]!, error: NSError!) -> Void in
             self.businesses = businesses
             self.tableView.reloadData()
         }

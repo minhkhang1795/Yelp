@@ -17,17 +17,17 @@ Time spent: `<Number of hours spent>`
 - [x] The filters table should be organized into sections as in the mock.
 - [x] You can use the default UISwitch for on/off states. Optional: implement a custom switch
 - [x] Clicking on the "Search" button should dismiss the filters page and trigger the search w/ the new filter settings.
-- [ ] Display some of the available Yelp categories (choose any 3-4 that you want).
+- [x] Display some of the available Yelp categories (choose any 3-4 that you want).
 
 #### Optional
 
 - Search results page
 - [ ] Infinite scroll for restaurant results
-- [ ] Implement map view of restaurant results
+- [x] Implement map view of restaurant results
 - Filter page
-- [ ] Radius filter should expand as in the real Yelp app
-- [ ] Categories should show a subset of the full list with a "See All" row to expand. Category list is here: http://www.yelp.com/developers/documentation/category_list (Links to an external site.)
-- [ ] Implement the restaurant detail page.
+- [x] Radius filter should expand as in the real Yelp app
+- [x] Categories should show a subset of the full list with a "See All" row to expand. Category list is here: http://www.yelp.com/developers/documentation/category_list (Links to an external site.)
+- [x] Implement the restaurant detail page.
 
 ### Walkthrough
 

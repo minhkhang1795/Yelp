@@ -17,6 +17,8 @@ class SwitchCell: UITableViewCell {
     @IBOutlet weak var switchLabel: UILabel!
     @IBOutlet weak var onSwitch: UISwitch!
     
+    @IBOutlet weak var seeAllLabel: UILabel!
+    
     @IBOutlet weak var choiceLabel: UILabel!
     @IBOutlet weak var choiceImageView: UIImageView!
     var onChecked = false
