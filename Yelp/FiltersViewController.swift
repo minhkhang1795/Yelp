@@ -26,14 +26,23 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
     var sortByStates: [Bool] = [false, false, false]
     var switchStates = [Int:Bool]()
     
+    var categoriesSeeAll: Bool!
+    var sortBySeeAll: Bool!
+    var distanceSeeAll: Bool!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         categories = yelpCategories()
         deals = false
+        categoriesSeeAll = false
+        sortBySeeAll = false
+        distanceSeeAll = false
+        
         tableView.delegate = self
         tableView.dataSource = self
+        
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -90,59 +99,112 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
-        if section == 0 {
-            return 1 //deal
-        } else  if section == 1 {
-            return distance.count
-        } else if section == 2 {
-            return sortBy.count
-        } else {
-            return categories.count
+        switch(section) {
+        case 0:
+            return 1
+        case 1:
+            return distanceSeeAll == true ? distance.count : 1
+        case 2:
+            return sortBySeeAll == true ? sortBy.count : 1
+        case 3:
+            return categoriesSeeAll == true ? categories.count : 4
+        default:
+            return 0
+        }
+    }
+    
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch(section) {
+        case 0:
+            return "Deal"
+        case 1:
+            return "Distance"
+        case 2:
+            return "Sort by"
+        case 3:
+            return "Categories"
+        default:
+            return ""
         }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchCell
         
-        //Deals
+        var cell = tableView.dequeueReusableCellWithIdentifier("SwitchCell") as! SwitchCell
+        
+        // Deals
         if indexPath.section == 0 {
-            //let cell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchCell
             cell.switchLabel.text = "Offering a Deal"
             cell.delegate = self
             cell.onSwitch.on = deals ?? false
         }
             
-        //Distance
+        // Distance
         else if indexPath.section == 1 {
-            cell.switchLabel.text = String(format: "%.1f mi", distance[indexPath.row])
-            cell.delegate = self
-            cell.onSwitch.on = distanceStates[indexPath.row] ?? false
+            if sortBySeeAll == false && indexPath.row == 3 {
+                cell.switchLabel.text = String(format: "%.1f mi", distance[indexPath.row])
+                cell.delegate = self
+                cell.onSwitch.on = distanceStates[indexPath.row] ?? false
+                // Do something else...
+            }
+            else {
+                cell.switchLabel.text = String(format: "%.1f mi", distance[indexPath.row])
+                cell.delegate = self
+                cell.onSwitch.on = distanceStates[indexPath.row] ?? false
+                // Do something else...
+            }
         }
             
-        //Sort by
+        // Sort by
         else if indexPath.section == 2 {
             cell.switchLabel.text = sortBy[indexPath.row]
             cell.delegate = self
             cell.onSwitch.on = sortByStates[indexPath.row] ?? false
         }
          
-        //Categories
+        // Categories
         else if indexPath.section == 3 {
-            //let cell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchCell
-            cell.switchLabel.text = categories[indexPath.row]["name"]
-            cell.delegate = self
-            cell.onSwitch.on = switchStates[indexPath.row] ?? false
+            if categoriesSeeAll == false && indexPath.row == 3 {
+                var seeAllCell = tableView.dequeueReusableCellWithIdentifier("SeeAllCell") as! SwitchCell
+                return seeAllCell
+            }
+            else {
+                cell.switchLabel.text = categories[indexPath.row]["name"]
+                cell.delegate = self
+                cell.onSwitch.on = switchStates[indexPath.row] ?? false
+            }
         }
+        
         return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        if indexPath.section == 1 && indexPath.row == 0 && distanceSeeAll == false {
+            distanceSeeAll = true
+            self.tableView.reloadData()
+            //self.tableView.reloadSections(, withRowAnimation: UITableViewRowAnimation.Automatic)
+        }
+        if indexPath.section == 2 && indexPath.row == 0 && sortBySeeAll == false {
+            sortBySeeAll = true
+            self.tableView.reloadData()
+            //self.tableView.reloadSections(, withRowAnimation: UITableViewRowAnimation.Automatic)
+        }
+        if indexPath.section == 3 && indexPath.row == 3 && categoriesSeeAll == false {
+            categoriesSeeAll = true
+            self.tableView.reloadData()
+            //self.tableView.reloadSections(, withRowAnimation: UITableViewRowAnimation.Automatic)
+        }
     }
     
     func switchCell(switchCell: SwitchCell, didChangeValue value: Bool) {
         let indexPath = tableView.indexPathForCell(switchCell)!
-        
+        //Deals
         if indexPath.section == 0 {
             deals = value
         }
-        
+        //Distance
         else if indexPath.section == 1 {
             for var i = 0; i < distance.count; i++ {
                 if i == indexPath.row {
@@ -154,7 +216,7 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
                 self.tableView.reloadRowsAtIndexPaths([indexPathTemp], withRowAnimation: UITableViewRowAnimation.Fade)
             }
         }
-        
+        //Sort
         else if indexPath.section == 2 {
             for var i = 0; i < sortBy.count; i++ {
                 if i == indexPath.row {
@@ -166,7 +228,7 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
                 self.tableView.reloadRowsAtIndexPaths([indexPathTemp], withRowAnimation: UITableViewRowAnimation.Fade)
             }
         }
-        
+        //Categories
         else {
             switchStates[indexPath.row] = value
         }

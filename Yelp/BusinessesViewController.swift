@@ -21,7 +21,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         super.viewDidLoad()
         
         self.searchBar.placeholder = "Restaurant"
-        //self.searchBar.
+        
         self.navigationItem.titleView = searchBar
         self.searchBar.delegate = self
         
@@ -39,18 +39,21 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
 //                println(business.address!)
 //            }
 //        })
+        
         tableView.dataSource = self
         tableView.delegate = self
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 120
         
-        Business.searchWithTerm("Restaurants", sort: .Distance, categories: nil, deals: nil, distance: 10) { (businesses: [Business]!, error: NSError!) -> Void in
+        Business.searchWithTerm("Restaurants", sort: .Distance, categories: nil, deals: nil, distance: 10, offset: 0) { (businesses: [Business]!, error: NSError!) -> Void in
             
             self.businesses = businesses
             self.tableView.reloadData()
         
         }
     }
+    
+    // - Table View
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if searchBarFilters != nil {
@@ -73,6 +76,10 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
 
     
@@ -123,10 +130,22 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     // MARK: - Navigation
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let navigationController = segue.destinationViewController as! UINavigationController
-        let filtersViewController = navigationController.topViewController as! FiltersViewController
+        if segue.identifier == "Filters" {
+            let navigationController = segue.destinationViewController as! UINavigationController
+            let filtersViewController = navigationController.topViewController as! FiltersViewController
+            
+            filtersViewController.delegate = self
+        }
         
-        filtersViewController.delegate = self
+        else if segue.identifier == "BusinessDetails" {
+            let cell = sender as! UITableViewCell
+            let indexPath = tableView.indexPathForCell(cell)!
+            
+            let business = searchActive ? searchBarFilters[indexPath.row] : businesses![indexPath.row]
+            
+            let businessDetailsViewController = segue.destinationViewController as! BusinessDetailsViewController
+            businessDetailsViewController.business = business
+        }
     }
     
     func filtersViewController(filltersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
@@ -143,7 +162,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         //Categories
         var categories = filters["categories"] as? [String]
         
-        Business.searchWithTerm("Restaurants", sort: sort, categories: categories, deals: deals, distance: distance) { (businesses: [Business]!, error: NSError!) -> Void in
+        Business.searchWithTerm("Restaurants", sort: sort, categories: categories, deals: deals, distance: distance, offset: 20) { (businesses: [Business]!, error: NSError!) -> Void in
             self.businesses = businesses
             self.tableView.reloadData()
         }
