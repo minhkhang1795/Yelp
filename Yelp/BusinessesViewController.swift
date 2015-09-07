@@ -125,7 +125,6 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         self.fadedView.alpha = 0
     }
 
-
     
     // MARK: - Navigation
 
