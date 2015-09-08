@@ -77,9 +77,9 @@ class YelpClient: BDBOAuth1RequestOperationManager {
             parameters["radius_filter"] = distance!/milesPerMeter
         }
         
-//        if offset != nil {
-//            parameters["offset"] = offset
-//        }
+        if offset != nil {
+            parameters["offset"] = offset!
+        }
         
         
         println(parameters)

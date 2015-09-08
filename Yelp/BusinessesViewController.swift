@@ -17,11 +17,20 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     var businesses: [Business]!
     var searchBarFilters: [Business]!
     
+    var currentDeal: Bool!
+    var currentDistance: Float!
+    var currentSort: YelpSortMode!
+    var currentCategories: [String]!
+    var currentOffset: Int!
+    
+    var tempTableFooter: UIView!
+    var loadingState: UIActivityIndicatorView!
+    var noMoreResultLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.searchBar.placeholder = "Restaurant"
-        
         self.navigationItem.titleView = searchBar
         self.searchBar.delegate = self
         
@@ -30,30 +39,27 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         self.fadedView.addGestureRecognizer(fadedViewtapGestureRecognizer)
         let fadedViewpanGestureRecognizer = UIPanGestureRecognizer(target: self, action: "onFadedViewTap")
         self.fadedView.addGestureRecognizer(fadedViewpanGestureRecognizer)
-
-//        Business.searchWithTerm("Thai", completion: { (businesses: [Business]!, error: NSError!) -> Void in
-//            self.businesses = businesses
-//            
-//            for business in businesses {
-//                println(business.name!)
-//                println(business.address!)
-//            }
-//        })
+        
         
         tableView.dataSource = self
         tableView.delegate = self
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 120
+        tableFooterViewConfig()
         
-        Business.searchWithTerm("Restaurants", sort: .Distance, categories: nil, deals: nil, distance: 10, offset: 0) { (businesses: [Business]!, error: NSError!) -> Void in
+        Business.searchWithTerm("Restaurants", sort: currentSort, categories: currentCategories, deals: currentDeal, distance: currentDistance, offset: currentOffset) { (businesses: [Business]!, error: NSError!) -> Void in
             
             self.businesses = businesses
             self.tableView.reloadData()
-        
         }
     }
     
-    // - Table View
+    override func viewDidLayoutSubviews() {
+        tableFooterViewConfig()
+    }
+    
+    
+    // MARK: - Table View
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let businesses = businesses {
@@ -71,6 +77,12 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         var business = searchActive ? searchBarFilters : businesses!
         cell.business = business[indexPath.row]
         
+        if indexPath.row == businesses.count - 1 {
+            noMoreResultLabel.hidden ? self.loadingState.startAnimating() : loadingState.stopAnimating()
+            searchMoreBusinesses()
+        } else {
+            loadingState.stopAnimating()
+        }
         return cell
     }
 
@@ -82,7 +94,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
-
+    
     
     // MARK: - Search Bar
     
@@ -150,22 +162,70 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func filtersViewController(filltersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
         
-        //Deals
-        var deals = filters["deals"] as? Bool
+        // Deals
+        currentDeal = filters["deals"] as? Bool
         
-        //Distance
-        var distance = filters["distance"] as? Float
+        // Distance
+        currentDistance = filters["distance"] as? Float
         
-        //Sort
+        // Sort
         var sortRawValue = filters["sortRawValue"] as? Int
-        var sort = (sortRawValue != nil) ? YelpSortMode(rawValue: sortRawValue!) : nil
+        currentSort = (sortRawValue != nil) ? YelpSortMode(rawValue: sortRawValue!) : nil
         
-        //Categories
-        var categories = filters["categories"] as? [String]
+        // Categories
+        currentCategories = filters["categories"] as? [String]
         
-        Business.searchWithTerm("Restaurants", sort: sort, categories: categories, deals: deals, distance: distance, offset: nil) { (businesses: [Business]!, error: NSError!) -> Void in
+        // Reset offset
+        currentOffset = 0
+        
+        Business.searchWithTerm("Restaurants", sort: currentSort, categories: currentCategories, deals: currentDeal, distance: currentDistance, offset: currentOffset) { (businesses: [Business]!, error: NSError!) -> Void in
             self.businesses = businesses
+            if self.businesses.count == 0 {
+                self.noMoreResultLabel.text = "Can not find any result"
+                self.noMoreResultLabel.hidden = false
+            } else {
+                self.noMoreResultLabel.text = "No more result"
+            }
             self.tableView.reloadData()
         }
+    }
+    
+    
+    // MARK: - Search more Businesses
+    
+    func searchMoreBusinesses() {
+        var moreBusinesses: [Business]!
+        currentOffset = businesses.count
+        Business.searchWithTerm("Restaurants", sort: currentSort, categories: currentCategories, deals: currentDeal, distance: currentDistance, offset: currentOffset) { (businesses: [Business]!, error: NSError!) -> Void in
+            moreBusinesses = businesses
+            if moreBusinesses.count == 0 {
+                self.noMoreResultLabel.hidden = false
+            } else {
+                self.noMoreResultLabel.hidden = true
+                for business in moreBusinesses {
+                    self.businesses.append(business)
+                }
+            }
+            self.tableView.reloadData()
+        }
+    }
+    
+    
+    func tableFooterViewConfig() {
+        tempTableFooter = UIView(frame: CGRect(x: 0, y: 0, width: CGRectGetWidth(view.frame), height: 40))
+        loadingState = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+        loadingState.center = tempTableFooter.center
+        loadingState.hidden = true
+        
+        noMoreResultLabel = UILabel(frame: CGRect(x: 0, y: 0, width: CGRectGetWidth(view.frame), height: 40))
+        noMoreResultLabel.text = "No More Result"
+        noMoreResultLabel.textAlignment = .Center
+        noMoreResultLabel.center = tempTableFooter.center
+        noMoreResultLabel.hidden = true
+        
+        tempTableFooter.addSubview(loadingState)
+        tempTableFooter.addSubview(noMoreResultLabel)
+        
+        tableView.tableFooterView = tempTableFooter
     }
 }
