@@ -181,10 +181,10 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         Business.searchWithTerm("Restaurants", sort: currentSort, categories: currentCategories, deals: currentDeal, distance: currentDistance, offset: currentOffset) { (businesses: [Business]!, error: NSError!) -> Void in
             self.businesses = businesses
             if self.businesses.count == 0 {
-                self.noMoreResultLabel.text = "Can not find any result"
+                self.noMoreResultLabel.text = "No Result Found"
                 self.noMoreResultLabel.hidden = false
             } else {
-                self.noMoreResultLabel.text = "No more result"
+                self.noMoreResultLabel.text = "No More Result"
             }
             self.tableView.reloadData()
         }
